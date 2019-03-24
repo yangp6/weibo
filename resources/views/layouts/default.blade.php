@@ -7,7 +7,7 @@
 </head>
 <body>
 
-  <nav class="navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
       <a href="navbar-brand" href="/">Weibo App</a>
       <ul class="navbar-nav justify-content-end">
