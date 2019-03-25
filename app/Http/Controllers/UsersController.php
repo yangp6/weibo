@@ -10,6 +10,39 @@ use Auth;
  */
 class UsersController extends Controller
 {
+    //编辑表单
+     public function edit(User $user)
+    {
+        return view('users.edit',compact('user'));
+    }
+    //更新操作
+    public function update(User $user,Request $request)
+    {
+        //数据校验
+        $message = [
+            'name.required'=>'用户名称不能为空',
+            'name.max'=>'用户名长度不能超过50个字符',
+            'name.unique'=>'用户名已经存在',
+            'password.nullable'=>'密码可以为空',
+            'password.confirmed'=>'两次输入密码不一致',
+            'password.min'=>'密码长度不能小于6个字符',
+        ];
+        $this->validate($request,[
+            'name'=>'required|max:50|unique:users,name,'.$user->id,                      //必填， 最大长度50
+            'password'=>'nullable|confirmed|min:6',         //必填，两次密码一致，最小长度6位
+        ],$message);
+
+        //返回一个用户对象
+        $data = ['name'=>$request->name];
+        if($request->password)
+        {
+            $data['password'] = bcrypt($request->password);
+        }
+        $user->update($data);
+
+        session()->flash('success','恭喜你，修改成功');
+        return redirect()->route('users.show',$user->id);
+    }
     //注册页面
     public function create()
     {
