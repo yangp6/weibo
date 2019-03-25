@@ -34,7 +34,16 @@ class UsersController extends Controller
             'email'=>'required|email|unique:users|max:255', //必填，邮箱格式，唯一性，最大长度255
             'password'=>'required|confirmed|min:6',         //必填，两次密码一致，最小长度6位
         ],$message);
-        return;
+
+        //返回一个用户对象
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+        session()->flash('success','恭喜你，注册成功');
+        return redirect()->route('users.show',[$user]);
     }
 
     //展示用户个人信息
