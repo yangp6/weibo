@@ -9,6 +9,13 @@ use Auth;
  */
 class SessionsController extends Controller
 {
+    public function __construct()
+    {
+        //只让未登录用户访问登录页面
+        $this->middleware('guest',[
+            'only'=>['create']
+        ]);
+    }
     //展示登录界面
     public function create()
     {
@@ -35,7 +42,9 @@ class SessionsController extends Controller
         {
             //登录成功
             session()->flash('success','欢迎回来');
-            return redirect()->route('users.show',[Auth::user()]);
+            $fallback = route('users.show',[Auth::user()]);
+            //当上一次请求记录为空时，跳转到默认地址users.show
+            return redirect()->intended($fallback);
         }
         else
         {

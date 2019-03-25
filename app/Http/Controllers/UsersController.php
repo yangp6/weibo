@@ -10,14 +10,30 @@ use Auth;
  */
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        //不用登录就能进行的动作
+        $this->middleware('auth',[
+            'except'=>['show','create','store']
+        ]);
+
+        //只让未登录用户访问注册页面
+        $this->middleware('guest',[
+            'only'=>['create']
+        ]);
+    }
     //编辑表单
      public function edit(User $user)
     {
+        //授权只能展示自己的编辑表单
+        $this->authorize('update', $user);
         return view('users.edit',compact('user'));
     }
     //更新操作
     public function update(User $user,Request $request)
     {
+        //授权只能修改自己的信息
+        $this->authorize('update', $user);
         //数据校验
         $message = [
             'name.required'=>'用户名称不能为空',
