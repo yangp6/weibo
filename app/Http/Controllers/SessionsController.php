@@ -30,8 +30,8 @@ class SessionsController extends Controller
             'password'=>'required',
         ],$message);
 
-        //校验邮箱与密码
-        if(Auth::attempt($result))
+        //校验邮箱与密码,开启记住我的功能
+        if(Auth::attempt($result,$request->has('remember')))
         {
             //登录成功
             session()->flash('success','欢迎回来');
@@ -43,8 +43,6 @@ class SessionsController extends Controller
             session()->flash('danger','很抱歉，你的邮箱和密码不匹配');
             return redirect()->back()->withInput();
         }
-        return;
-
     }
     //退出登录
     public function destroy()
