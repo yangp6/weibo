@@ -12,3 +12,11 @@ Route::get('signup','UsersController@create')->name('signup');
 
 //用户操作
 Route::resource('users','UsersController');
+
+//登录表单
+Route::get('login', 'SessionsController@create')->name('login');
+//登录操作
+Route::post('login', 'SessionsController@store')->name('login');
+//退出登录
+Route::delete('logout', 'SessionsController@destroy')->name('logout');
+
