@@ -14,14 +14,22 @@ class UsersController extends Controller
     {
         //不用登录就能进行的动作
         $this->middleware('auth',[
-            'except'=>['show','create','store']
+            'except'=>['index','show','create','store']
         ]);
 
-        //只让未登录用户访问注册页面
+        //只允许未登录用户才能访问注册页面
         $this->middleware('guest',[
             'only'=>['create']
         ]);
     }
+
+    //用户列表
+    public function index()
+    {
+        $users = User::paginate(10);
+        return view('users.index',compact('users'));
+    }
+
     //编辑表单
      public function edit(User $user)
     {
